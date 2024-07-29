@@ -2,6 +2,14 @@
 
 - create react app
 - configured TailwindCSS
+- Routing for App
+- Sign In Form
+- Sign Up Form
+- Form Validation
+- useRef Hook
+- Firesbase Setup
+- Deployed app to production
+- Create Sign Up User Account in Firebase
 
 # Features
 
