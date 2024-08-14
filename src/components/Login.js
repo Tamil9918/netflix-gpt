@@ -3,15 +3,21 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
+import { updateProfile } from "firebase/auth";
 import { auth } from "../utils/firebase";
 import Header from "./Header";
+import { addUser } from "../utils/userSlice";
 import { checkValidData } from "../utils/validate";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 const Login = () => {
   const [isSignIn, setIsSignIn] = useState(true);
   const [errorMessage, setErrorMesssage] = useState(null);
   const name = useRef(null);
   const email = useRef(null);
   const password = useRef(null);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const toggleSingInForm = () => {
     setIsSignIn(!isSignIn);
   };
@@ -32,6 +38,22 @@ const Login = () => {
           // Signed up
           const user = userCredential.user;
           console.log("success", user);
+          updateProfile(user, {
+            displayName: name.current.value,
+            photoURL:
+              "https://www.shutterstock.com/image-vector/flat-vector-cute-cartoon-panda-600nw-2343798945.jpg",
+          })
+            .then(() => {
+              const { uid, email, displayName, photoURL } = auth.currentUser;
+              dispatch(addUser({ uid, email, displayName, photoURL }));
+              navigate("/browse");
+            })
+            .catch((error) => {
+              // An error occurred
+              // ...
+              setErrorMesssage(error.message);
+            });
+
           // ...
         })
         .catch((error) => {
@@ -51,6 +73,7 @@ const Login = () => {
           const user = userCredential.user;
           console.log("resgistered user", user);
           // ...
+          navigate("/browse");
         })
         .catch((error) => {
           console.log("error in sign in", error);
