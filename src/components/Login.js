@@ -10,6 +10,7 @@ import { addUser } from "../utils/userSlice";
 import { checkValidData } from "../utils/validate";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { LOGO } from "../utils/constants";
 const Login = () => {
   const [isSignIn, setIsSignIn] = useState(true);
   const [errorMessage, setErrorMesssage] = useState(null);
@@ -37,11 +38,10 @@ const Login = () => {
         .then((userCredential) => {
           // Signed up
           const user = userCredential.user;
-          console.log("success", user);
+
           updateProfile(user, {
             displayName: name.current.value,
-            photoURL:
-              "https://www.shutterstock.com/image-vector/flat-vector-cute-cartoon-panda-600nw-2343798945.jpg",
+            photoURL: LOGO,
           })
             .then(() => {
               const { uid, email, displayName, photoURL } = auth.currentUser;
@@ -57,7 +57,6 @@ const Login = () => {
           // ...
         })
         .catch((error) => {
-          console.log("error", error);
           setErrorMesssage(error.code + "-" + error.message);
           // ..
         });
@@ -70,13 +69,10 @@ const Login = () => {
       )
         .then((userCredential) => {
           // Signed in
-          const user = userCredential.user;
-          console.log("resgistered user", user);
           // ...
           navigate("/browse");
         })
         .catch((error) => {
-          console.log("error in sign in", error);
           setErrorMesssage(error.code + "-" + error.message);
         });
     }

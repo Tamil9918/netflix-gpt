@@ -12,6 +12,8 @@
 - Create Sign Up User Account in Firebase
 - Implement Sign In user API
 - Created Redux Store with userSlice
+- Implemented Sign Out, profile updation, add image
+- Fetch Movies
 
 # Features
 
