@@ -13,7 +13,7 @@
 - Implement Sign In user API
 - Created Redux Store with userSlice
 - Implemented Sign Out, profile updation, add image
-- Fetch Movies
+- Fetch Movies -TMDB API
 
 # Features
 
