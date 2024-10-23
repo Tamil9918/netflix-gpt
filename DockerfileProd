@@ -1,0 +1,14 @@
+# Use Nginx Alpine as the base image
+FROM nginx:alpine
+
+# Set the working directory
+WORKDIR /usr/share/nginx/html
+
+# Copy only the build output to the Nginx directory
+COPY ./build . 
+
+# Expose port 80 to the outside world
+EXPOSE 3000
+
+# Start Nginx
+CMD ["nginx", "-g", "daemon off;"]
