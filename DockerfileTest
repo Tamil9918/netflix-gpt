@@ -1,38 +1,28 @@
-# Use a lightweight Node.js image to build the application
-FROM node:18-alpine3.19 AS build
+# Use Nginx Alpine as the base image
+FROM nginx:1.27.2-alpine-slim
 
-# Set working directory inside the container
-WORKDIR /usr/local/app
+# Create a new user 'minesgisuser' with UID 1234 and set it as a non-root user
+RUN adduser -D -u 1234 minesgisuser
 
-# Copy the package.json and package-lock.json to the working directory
-COPY package*.json ./
+# Create an app directory
+RUN mkdir -p /usr/share/nginx/html/app
 
-
-# Install project dependencies
-RUN npm install
-
-# Copy all the source files to the working directory
-COPY . .
-
-RUN if [ -f "package.lock.json" ]; then rm package.lock.json; fi
-
-# Build the application using Parcel (assuming the build command is set in package.json)
-RUN npm install && npm run build && rm -rf node_modules  
+# Copy custom NGINX configuration file
+COPY nginx.conf /etc/nginx/nginx.conf
 
 
-#REMOVE node_modules and package.json if they exists
-#RUN rm -rf node_modules
-#RUN if [ -f "package.lock.json" ]; then rm package.lock.json; fi
+# Copy the locally built 'dist' folder to the NGINX html directory
+COPY build/ /usr/share/nginx/html/app
 
+RUN touch /var/run/nginx.pid
 
-# Start a new stage from a minimal image
-FROM nginx:alpine
+RUN chown -R minesgisuser:minesgisuser /var/run/nginx.pid /usr/share/nginx/html /var/cache/nginx /var/log/nginx /etc/nginx/conf.d /etc/nginx/nginx.conf
 
-# Copy the built files from the previous stage to the nginx html folder
-COPY --from=build /usr/local/app/build /usr/share/nginx/html
+# Switch to the non-root user
+USER minesgisuser
 
-# Expose the port to be used by the container
+# Expose port 80 to the outside world
 EXPOSE 3000
 
-# Start the Nginx server
+# Start Nginx in non-daemon mode without requiring a PID file
 CMD ["nginx", "-g", "daemon off;"]
