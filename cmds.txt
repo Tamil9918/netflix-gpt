@@ -1,0 +1,32 @@
+docker build -t my-geoserver .
+
+
+docker run -d --name geoserver -v D:/geoserver_docker/geoserver_data:/usr/local/geoserver_data -p 8080:8080 my-geoserver:v1
+
+docker run -d -p 8080:8080 --name my-geoserver-container my-geoserver
+
+docker exec -it <container_name_or_id> /bin/sh
+
+
+host.docker.internal ->> is a special DNS name used in Docker for Windows and Docker for Mac that allows containers to communicate with services running on the host machine. Here’s a detailed breakdown of what it does and how it can be used:
+
+
+//------------------------------push image to docker hub repository-------------------------------//
+docker login
+docker images -> list exisiting docker images
+docker tag my_geoserver:v1.0 tamil01/my_applications:my_geoserver_v1.0 
+ docker push tamil01/my_applications:mygeoserver_v1.0
+ 
+ //-------------------------------------------backend application docker image -------------------------------//
+ docker build -t my-node-app:v1.0 .
+ 
+ docker run -d --name my-backend-app --env-file .env -p 3000:3000 my-node-app:v1.0 
+ 
+ 
+ docker tag my_netflix-gpt:v1.0 tamil01/my_applications:my_netflix-gpt_v1.0
+ 
+ 
+ ///------------------------------------------------------------------data uploader-----------------------------------------//
+ docker build -f DockerfileTest -t backend-test .
+ 
+ docker run -d --name test-container -v D:/shapefiles:/usr/src/app/shapefiles -p 3000:3000 backend-test
